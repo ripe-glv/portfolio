@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;600;700;900&display=swap');
+
+:root {
+  /* Tech Cyber Palette */
+  --color-bg-primary: #030712;
+  --color-bg-secondary: rgba(17, 24, 39, 0.7);
+  --color-bg-tertiary: #1f2937;
+  
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  
+  --color-accent: #00f0ff;
+  --color-accent-hover: #3b82f6;
+  --color-accent-glow: rgba(0, 240, 255, 0.4);
+  --color-accent-purple: #8b5cf6;
+  
+  --color-border: rgba(59, 130, 246, 0.3);
+  --color-border-glow: rgba(0, 240, 255, 0.6);
+
+  --font-main: 'Outfit', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Scrollbar customization for a tech look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-accent);
+  transition: all var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+  text-shadow: 0 0 8px var(--color-accent-glow);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+/* Glass & Neon Card */
+.cyber-card {
+  position: relative;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--transition-medium);
+  z-index: 1;
+}
+
+/* Glowing border effect */
+.cyber-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(135deg, transparent, transparent, var(--color-border));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  transition: all var(--transition-medium);
+  z-index: -1;
+}
+
+.cyber-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-accent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--color-accent-glow);
+}
+
+.cyber-card:hover::before {
+  background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent));
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 10px var(--color-accent-glow); }
+  50% { box-shadow: 0 0 25px var(--color-accent-glow), 0 0 10px var(--color-accent); }
+  100% { box-shadow: 0 0 10px var(--color-accent-glow); }
+}
