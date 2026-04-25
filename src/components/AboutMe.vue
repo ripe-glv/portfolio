@@ -28,7 +28,7 @@ onMounted(() => {
       <div class="avatar-wrapper">
         <div class="avatar-border-spin"></div>
         <div class="avatar-core">
-          <img src="../assets/profile.jpg" alt="Filipe G." class="avatar-img" @error="$event.target.src='https://via.placeholder.com/140?text=FG'" />
+          <img src="../assets/profile.jpg" alt="Filipe Galvão" class="avatar-img" />
         </div>
       </div>
       
