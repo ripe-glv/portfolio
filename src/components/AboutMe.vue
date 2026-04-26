@@ -34,7 +34,7 @@ onMounted(() => {
       
       <div class="info">
         <div class="greeting-badge">HELLO_WORLD</div>
-        <h1>Filipe G.</h1>
+        <h1>Filipe Galvão</h1>
         <h2 class="subtitle-terminal">{{ typedText }}<span class="cursor" v-if="typedText.length === textToType.length"></span></h2>
         
         <p class="bio">
