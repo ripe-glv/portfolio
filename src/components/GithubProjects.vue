@@ -6,6 +6,7 @@ interface Repository {
   name: string
   description: string
   html_url: string
+  homepage: string | null
   language: string
   stargazers_count: number
   forks_count: number
@@ -59,7 +60,7 @@ onMounted(async () => {
       <a 
         v-for="(repo, index) in repos" 
         :key="repo.id" 
-        :href="repo.html_url" 
+        :href="repo.homepage || repo.html_url" 
         target="_blank" 
         rel="noopener noreferrer"
         class="project-card cyber-card animate-fade-in-up"
