@@ -17,6 +17,7 @@ interface Project {
   description: string
   projectUrl: string
   sourceUrl?: string
+  screenshot?: string
   tags: string[]
   visual: 'law' | 'solar' | 'game' | 'data' | 'code'
   eyebrow: string
@@ -33,7 +34,19 @@ const featuredProject: Project = {
   eyebrow: 'Projeto em destaque',
 }
 
-const projects = ref<Project[]>([featuredProject])
+const syntaxProject: Project = {
+  id: 'syntax',
+  title: 'Syntax — Horror Game',
+  description:
+    'Jogo de escape room em primeira pessoa: explore o ambiente e altere o código para escapar de uma IA hostil.',
+  projectUrl: 'https://syntax.filipeglv7.chatgpt.site/',
+  screenshot: `${import.meta.env.BASE_URL}projects/syntax.png`,
+  tags: ['Godot', 'Escape room', 'Windows'],
+  visual: 'game',
+  eyebrow: 'Projeto publicado',
+}
+
+const projects = ref<Project[]>([featuredProject, syntaxProject])
 const loading = ref(true)
 const error = ref(false)
 const track = ref<HTMLElement | null>(null)
@@ -128,11 +141,16 @@ onMounted(async () => {
 
     const repositories = (await response.json()) as Repository[]
     const selected = repositories
-      .filter((repo) => !repo.fork && !['portfolio', 'ripe-glv'].includes(repo.name))
+      .filter((repo) => !repo.fork && !['portfolio', 'ripe-glv', 'syntax'].includes(repo.name))
       .sort((a, b) => Number(Boolean(b.homepage)) - Number(Boolean(a.homepage)))
       .slice(0, 7)
 
-    projects.value = [featuredProject, ...selected.map(repositoryToProject)]
+    const syntaxRepository = repositories.find((repo) => repo.name === 'syntax' && !repo.fork)
+    projects.value = [
+      featuredProject,
+      { ...syntaxProject, sourceUrl: syntaxRepository?.html_url },
+      ...selected.map(repositoryToProject),
+    ]
   } catch {
     error.value = true
   } finally {
@@ -176,7 +194,15 @@ onBeforeUnmount(stopAutoplay)
     >
       <article v-for="project in projects" :key="project.id" class="project-card">
         <div class="project-artwork" :class="`artwork-${project.visual}`">
-          <div v-if="project.visual === 'law'" class="law-preview" aria-hidden="true">
+          <img
+            v-if="project.screenshot"
+            class="project-screenshot"
+            :src="project.screenshot"
+            :alt="`Captura de tela do site ${project.title}`"
+            loading="lazy"
+            decoding="async"
+          />
+          <div v-else-if="project.visual === 'law'" class="law-preview" aria-hidden="true">
             <div class="preview-nav"><span>BLL</span><i></i><i></i><i></i></div>
             <div class="law-copy">
               <small>Advocacia estratégica</small><b>Defesa com excelência.</b><i></i>
@@ -245,7 +271,7 @@ onBeforeUnmount(stopAutoplay)
     </div>
 
     <p v-if="error" class="projects-note">
-      O projeto em destaque está disponível. Os repositórios do GitHub não puderam ser carregados
+      Os projetos em destaque estão disponíveis. Os repositórios do GitHub não puderam ser carregados
       agora.
     </p>
   </section>
