@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-interface Repository {
-  id: number
-  name: string
-  description: string | null
-  html_url: string
-  homepage: string | null
-  language: string | null
-  fork: boolean
-}
+import {
+  featuredProjects,
+  repositoryToProject,
+  selectRepositories,
+  type Repository,
+  type Project,
+} from '../data/projects'
+import savedRepositories from '../data/repositories.json'
+import savedPreviews from '../data/previews.json'
 
+<<<<<<< HEAD
 interface Project {
   id: number | string
   title: string
@@ -47,60 +48,28 @@ const syntaxProject: Project = {
 }
 
 const projects = ref<Project[]>([featuredProject, syntaxProject])
+=======
+const previews: Record<string, string> = savedPreviews
+const projects = ref<Project[]>([
+  ...featuredProjects,
+  ...savedRepositories.map(repositoryToProject),
+])
+>>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
 const loading = ref(true)
 const error = ref(false)
+const failedPreviews = ref<Record<string, boolean>>({})
 const track = ref<HTMLElement | null>(null)
 let autoplay: ReturnType<typeof setInterval> | undefined
-
-const nameMap: Record<string, string> = {
-  'solar-saas': 'Solar SaaS',
-  'pokemon-web-rpg': 'Pokémon Web RPG',
-  pkmshinySensor: 'Pokémon Shiny Sensor',
-  syntax: 'Syntax — Horror Game',
-  'pbl3-redes': 'Laboratório de Redes',
-  'pbl2-redes': 'Protocolos de Rede',
-  'ic-filipe': 'Pesquisa em Ciência de Dados',
-}
-
-const descriptionMap: Record<string, string> = {
-  'solar-saas': 'Plataforma SaaS para gestão e acompanhamento de usinas de energia solar.',
-  'pokemon-web-rpg': 'RPG web inspirado em Pokémon, com exploração e mecânicas interativas.',
-  pkmshinySensor: 'Sensor simulado para identificar o surgimento de Pokémon raros.',
-  syntax: 'Jogo de horror e escape room com atmosfera imersiva e desafios narrativos.',
-  'pbl3-redes': 'Projeto acadêmico sobre redes, comunicação e serviços distribuídos.',
-  'pbl2-redes': 'Implementação prática de protocolos e fundamentos de redes.',
-  'ic-filipe': 'Pesquisa aplicada usando notebooks, análise e ciência de dados.',
-}
-
-const visualMap: Record<string, Project['visual']> = {
-  'solar-saas': 'solar',
-  'pokemon-web-rpg': 'game',
-  pkmshinySensor: 'game',
-  syntax: 'game',
-  'ic-filipe': 'data',
-}
-
 const projectCount = computed(() => projects.value.length)
 
-function repositoryToProject(repo: Repository): Project {
-  const title = nameMap[repo.name] ?? repo.name.replaceAll('-', ' ')
-  const tags = [repo.language, repo.homepage ? 'Aplicação web' : 'Open source'].filter(
-    (tag): tag is string => Boolean(tag),
-  )
+function previewUrl(project: Project) {
+  if (!project.hasWebsite) return
+  const path = previews[project.projectUrl]
+  return path ? `${import.meta.env.BASE_URL}${path}` : undefined
+}
 
-  return {
-    id: repo.id,
-    title,
-    description:
-      descriptionMap[repo.name] ??
-      repo.description ??
-      'Projeto autoral desenvolvido para explorar tecnologia, arquitetura e solução de problemas.',
-    projectUrl: repo.homepage || repo.html_url,
-    sourceUrl: repo.html_url,
-    tags,
-    visual: visualMap[repo.name] ?? (repo.language === 'Python' ? 'data' : 'code'),
-    eyebrow: repo.homepage ? 'Projeto publicado' : 'Repositório',
-  }
+function projectHost(project: Project) {
+  return new URL(project.projectUrl).hostname
 }
 
 function move(direction: 1 | -1) {
@@ -136,10 +105,12 @@ onMounted(async () => {
   try {
     const response = await fetch(
       'https://api.github.com/users/ripe-glv/repos?sort=updated&per_page=30',
+      { signal: AbortSignal.timeout(10000) },
     )
     if (!response.ok) throw new Error('GitHub indisponível')
 
     const repositories = (await response.json()) as Repository[]
+<<<<<<< HEAD
     const selected = repositories
       .filter((repo) => !repo.fork && !['portfolio', 'ripe-glv', 'syntax'].includes(repo.name))
       .sort((a, b) => Number(Boolean(b.homepage)) - Number(Boolean(a.homepage)))
@@ -150,6 +121,11 @@ onMounted(async () => {
       featuredProject,
       { ...syntaxProject, sourceUrl: syntaxRepository?.html_url },
       ...selected.map(repositoryToProject),
+=======
+    projects.value = [
+      ...featuredProjects,
+      ...selectRepositories(repositories).map(repositoryToProject),
+>>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
     ]
   } catch {
     error.value = true
@@ -193,6 +169,7 @@ onBeforeUnmount(stopAutoplay)
       @keydown.right.prevent="move(1)"
     >
       <article v-for="project in projects" :key="project.id" class="project-card">
+<<<<<<< HEAD
         <div class="project-artwork" :class="`artwork-${project.visual}`">
           <img
             v-if="project.screenshot"
@@ -208,16 +185,39 @@ onBeforeUnmount(stopAutoplay)
               <small>Advocacia estratégica</small><b>Defesa com excelência.</b><i></i>
             </div>
             <div class="law-seal">§</div>
+=======
+        <a
+          v-if="project.hasWebsite"
+          class="project-artwork"
+          :href="project.projectUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          :aria-label="`Abrir ${project.title}`"
+        >
+          <div class="preview-toolbar" aria-hidden="true">
+            <span class="preview-dots"><i></i><i></i><i></i></span>
+            <span class="preview-address">{{ projectHost(project) }}</span>
+            <span>↗</span>
+>>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
           </div>
-          <div v-else-if="project.visual === 'solar'" class="dashboard-preview" aria-hidden="true">
-            <div class="preview-sidebar"><i></i><i></i><i></i><i></i></div>
-            <div class="dashboard-content">
-              <span></span>
-              <div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
-            </div>
-            <div class="sun-orbit">☼</div>
+          <img
+            v-if="previewUrl(project) && !failedPreviews[project.projectUrl]"
+            class="project-screenshot"
+            :src="previewUrl(project)"
+            :alt="`Captura de tela de ${project.title}`"
+            width="1440"
+            height="900"
+            loading="lazy"
+            decoding="async"
+            @error="failedPreviews[project.projectUrl] = true"
+          />
+          <div v-else class="preview-unavailable">
+            <strong>{{ project.title }}</strong>
+            <span>Preview indisponível · Abrir projeto ↗</span>
           </div>
-          <div v-else-if="project.visual === 'game'" class="game-preview" aria-hidden="true">
+        </a>
+        <div v-else class="project-artwork" :class="`artwork-${project.visual}`">
+          <div v-if="project.visual === 'game'" class="game-preview" aria-hidden="true">
             <div class="pixel-moon"></div>
             <div class="pixel-ground"></div>
             <div class="game-mark">✦</div>
@@ -271,8 +271,12 @@ onBeforeUnmount(stopAutoplay)
     </div>
 
     <p v-if="error" class="projects-note">
+<<<<<<< HEAD
       Os projetos em destaque estão disponíveis. Os repositórios do GitHub não puderam ser carregados
       agora.
+=======
+      Exibindo os projetos salvos. Não foi possível atualizar a lista do GitHub agora.
+>>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
     </p>
   </section>
 </template>

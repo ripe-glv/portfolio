@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1226149637,
+    "name": "solar-saas",
+    "description": "Saas focused on manage solar energy usines",
+    "html_url": "https://github.com/ripe-glv/solar-saas",
+    "homepage": "https://solar-saas-gold.vercel.app",
+    "language": "Vue",
+    "fork": false
+  },
+  {
+    "id": 1221374434,
+    "name": "pokemon-web-rpg",
+    "description": null,
+    "html_url": "https://github.com/ripe-glv/pokemon-web-rpg",
+    "homepage": "https://pokemon-web-rpg.onrender.com",
+    "language": "Python",
+    "fork": false
+  },
+  {
+    "id": 1264259162,
+    "name": "pbl3-redes",
+    "description": null,
+    "html_url": "https://github.com/ripe-glv/pbl3-redes",
+    "homepage": null,
+    "language": "Python",
+    "fork": false
+  },
+  {
+    "id": 1238277968,
+    "name": "pbl2-redes",
+    "description": null,
+    "html_url": "https://github.com/ripe-glv/pbl2-redes",
+    "homepage": null,
+    "language": "Python",
+    "fork": false
+  },
+  {
+    "id": 1180396512,
+    "name": "pkmshinySensor",
+    "description": "An simulated sensor that captures shinys spawned pokemons",
+    "html_url": "https://github.com/ripe-glv/pkmshinySensor",
+    "homepage": null,
+    "language": "Python",
+    "fork": false
+  },
+  {
+    "id": 1109585994,
+    "name": "syntax",
+    "description": "serious horror escape room game",
+    "html_url": "https://github.com/ripe-glv/syntax",
+    "homepage": null,
+    "language": "GDScript",
+    "fork": false
+  },
+  {
+    "id": 946247855,
+    "name": "ic-filipe",
+    "description": null,
+    "html_url": "https://github.com/ripe-glv/ic-filipe",
+    "homepage": null,
+    "language": "Jupyter Notebook",
+    "fork": false
+  }
+]
