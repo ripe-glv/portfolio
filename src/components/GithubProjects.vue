@@ -11,50 +11,11 @@ import {
 import savedRepositories from '../data/repositories.json'
 import savedPreviews from '../data/previews.json'
 
-<<<<<<< HEAD
-interface Project {
-  id: number | string
-  title: string
-  description: string
-  projectUrl: string
-  sourceUrl?: string
-  screenshot?: string
-  tags: string[]
-  visual: 'law' | 'solar' | 'game' | 'data' | 'code'
-  eyebrow: string
-}
-
-const featuredProject: Project = {
-  id: 'advocacia-bll',
-  title: 'Template para Advocacia',
-  description:
-    'Landing page elegante e responsiva para escritórios de advocacia, com foco em autoridade e conversão.',
-  projectUrl: 'https://template-advocacia-bll.pages.dev/',
-  tags: ['Landing page', 'Responsivo', 'UI/UX'],
-  visual: 'law',
-  eyebrow: 'Projeto em destaque',
-}
-
-const syntaxProject: Project = {
-  id: 'syntax',
-  title: 'Syntax — Horror Game',
-  description:
-    'Jogo de escape room em primeira pessoa: explore o ambiente e altere o código para escapar de uma IA hostil.',
-  projectUrl: 'https://syntax.filipeglv7.chatgpt.site/',
-  screenshot: `${import.meta.env.BASE_URL}projects/syntax.png`,
-  tags: ['Godot', 'Escape room', 'Windows'],
-  visual: 'game',
-  eyebrow: 'Projeto publicado',
-}
-
-const projects = ref<Project[]>([featuredProject, syntaxProject])
-=======
 const previews: Record<string, string> = savedPreviews
 const projects = ref<Project[]>([
   ...featuredProjects,
-  ...savedRepositories.map(repositoryToProject),
+  ...selectRepositories(savedRepositories).map(repositoryToProject),
 ])
->>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
 const loading = ref(true)
 const error = ref(false)
 const failedPreviews = ref<Record<string, boolean>>({})
@@ -110,22 +71,9 @@ onMounted(async () => {
     if (!response.ok) throw new Error('GitHub indisponível')
 
     const repositories = (await response.json()) as Repository[]
-<<<<<<< HEAD
-    const selected = repositories
-      .filter((repo) => !repo.fork && !['portfolio', 'ripe-glv', 'syntax'].includes(repo.name))
-      .sort((a, b) => Number(Boolean(b.homepage)) - Number(Boolean(a.homepage)))
-      .slice(0, 7)
-
-    const syntaxRepository = repositories.find((repo) => repo.name === 'syntax' && !repo.fork)
-    projects.value = [
-      featuredProject,
-      { ...syntaxProject, sourceUrl: syntaxRepository?.html_url },
-      ...selected.map(repositoryToProject),
-=======
     projects.value = [
       ...featuredProjects,
       ...selectRepositories(repositories).map(repositoryToProject),
->>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
     ]
   } catch {
     error.value = true
@@ -169,23 +117,6 @@ onBeforeUnmount(stopAutoplay)
       @keydown.right.prevent="move(1)"
     >
       <article v-for="project in projects" :key="project.id" class="project-card">
-<<<<<<< HEAD
-        <div class="project-artwork" :class="`artwork-${project.visual}`">
-          <img
-            v-if="project.screenshot"
-            class="project-screenshot"
-            :src="project.screenshot"
-            :alt="`Captura de tela do site ${project.title}`"
-            loading="lazy"
-            decoding="async"
-          />
-          <div v-else-if="project.visual === 'law'" class="law-preview" aria-hidden="true">
-            <div class="preview-nav"><span>BLL</span><i></i><i></i><i></i></div>
-            <div class="law-copy">
-              <small>Advocacia estratégica</small><b>Defesa com excelência.</b><i></i>
-            </div>
-            <div class="law-seal">§</div>
-=======
         <a
           v-if="project.hasWebsite"
           class="project-artwork"
@@ -198,7 +129,6 @@ onBeforeUnmount(stopAutoplay)
             <span class="preview-dots"><i></i><i></i><i></i></span>
             <span class="preview-address">{{ projectHost(project) }}</span>
             <span>↗</span>
->>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
           </div>
           <img
             v-if="previewUrl(project) && !failedPreviews[project.projectUrl]"
@@ -271,12 +201,7 @@ onBeforeUnmount(stopAutoplay)
     </div>
 
     <p v-if="error" class="projects-note">
-<<<<<<< HEAD
-      Os projetos em destaque estão disponíveis. Os repositórios do GitHub não puderam ser carregados
-      agora.
-=======
       Exibindo os projetos salvos. Não foi possível atualizar a lista do GitHub agora.
->>>>>>> 7e764f8214856332d56d8341be20c70175b88ae4
     </p>
   </section>
 </template>

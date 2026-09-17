@@ -40,6 +40,18 @@ export const featuredProjects: Project[] = [
     tags: ['Landing page', 'Responsivo', 'UI/UX'],
     eyebrow: 'Projeto em destaque',
   },
+  {
+    id: 'syntax',
+    title: 'Syntax — Horror Game',
+    description:
+      'Jogo de escape room em primeira pessoa: explore o ambiente e altere o código para escapar de uma IA hostil.',
+    projectUrl: 'https://syntax.filipeglv7.chatgpt.site/',
+    sourceUrl: 'https://github.com/ripe-glv/syntax',
+    hasWebsite: true,
+    visual: 'game',
+    tags: ['Godot', 'Escape room', 'Windows'],
+    eyebrow: 'Projeto publicado',
+  },
 ]
 
 const nameMap: Record<string, string> = {
@@ -79,7 +91,7 @@ export function selectRepositories(repositories: Repository[]): Repository[] {
       const homepage = publishedUrl(repo.homepage)
       return (
         !repo.fork &&
-        !['portfolio', 'ripe-glv'].includes(repo.name) &&
+        !['portfolio', 'ripe-glv', 'syntax'].includes(repo.name) &&
         !(homepage && featuredHosts.includes(new URL(homepage).hostname))
       )
     })
