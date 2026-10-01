@@ -87,7 +87,7 @@ onBeforeUnmount(stopAutoplay)
 </script>
 
 <template>
-  <section id="projetos" class="projects-section section-wrap" aria-labelledby="projects-title">
+  <section id="projetos" v-reveal class="projects-section section-wrap" aria-labelledby="projects-title">
     <div class="projects-heading">
       <div>
         <p class="section-kicker"><span></span>Projetos selecionados</p>

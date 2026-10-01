@@ -1,13 +1,48 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import AboutMe from './components/AboutMe.vue'
 import GithubProjects from './components/GithubProjects.vue'
 
 const year = new Date().getFullYear()
+const scrolled = ref(false)
+const progress = ref(0)
+const stack = [
+  'Python',
+  'TypeScript',
+  'Vue.js',
+  'JavaScript',
+  'SQL',
+  'Pandas',
+  'Machine Learning',
+  'Git',
+  'APIs REST',
+  'HTML & CSS',
+  'Data Viz',
+]
+
+function onScroll() {
+  const max = document.documentElement.scrollHeight - window.innerHeight
+  scrolled.value = window.scrollY > 12
+  progress.value = max > 0 ? window.scrollY / max : 0
+}
+
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <template>
   <div class="site-shell">
-    <header class="site-header">
+    <div class="scroll-progress" :style="{ '--p': progress }" aria-hidden="true"></div>
+    <div class="bg-fx" aria-hidden="true">
+      <div class="grid"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <header class="site-header" :class="{ scrolled }">
       <a class="brand" href="#inicio" aria-label="Ir para o início">
         <span class="brand-dot" aria-hidden="true"></span>
         <span>Filipe Galvão</span>
@@ -33,9 +68,16 @@ const year = new Date().getFullYear()
 
     <main>
       <AboutMe />
+
+      <div class="stack-strip" aria-label="Tecnologias">
+        <div class="stack-track" aria-hidden="true">
+          <span v-for="(tech, i) in [...stack, ...stack]" :key="i">{{ tech }}</span>
+        </div>
+      </div>
+
       <GithubProjects />
 
-      <section id="sobre" class="about-section section-wrap" aria-labelledby="about-title">
+      <section id="sobre" v-reveal class="about-section section-wrap" aria-labelledby="about-title">
         <div class="section-kicker"><span></span>Sobre mim</div>
         <div class="about-layout">
           <div>
@@ -73,7 +115,12 @@ const year = new Date().getFullYear()
         </div>
       </section>
 
-      <section id="contato" class="contact-section section-wrap" aria-labelledby="contact-title">
+      <section
+        id="contato"
+        v-reveal
+        class="contact-section section-wrap"
+        aria-labelledby="contact-title"
+      >
         <div class="contact-copy">
           <span class="section-kicker"><span></span>Contato</span>
           <h2 id="contact-title">Vamos construir algo incrível.</h2>
